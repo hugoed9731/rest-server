@@ -1,11 +1,15 @@
 const express = require('express')
 const cors = require('cors');
+const {dbConnection} = require('../database/config');
 
 class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
         this.usuariosPath = '/api/usuarios';
+
+        // * CONECTAR A BD
+        this.conectarDB();
 
         // Middelware  - son funciones que va añadir otra funcionalidad a mi web server
         // funcion que siempre se va a ejecutar cuando levantemos nuestro servidor
@@ -14,6 +18,10 @@ class Server {
         // Rutas
         this.routes();
         // esto dispara el metodo y el metodo configura mis rutas
+    }
+
+    async conectarDB(){
+        await dbConnection();
     }
 
 
