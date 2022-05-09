@@ -82,12 +82,17 @@ const usuariosDelete = async(req, res) =>  {
 
     const { id } = req.params;
 
+    // const uid = req.uid;  la request que viene de uid, esto lo obtuvimos en validar-jwt
+
     // ! borrar fisicamente
     // const usuario = await Usuario.findByIdAndDelete(id);
 
     // ? borrar cambiando el estado del usuario
 
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false}); // el id verificamos si existe en la bd
+    // const usuarioAuntenticado = req.usuario;
+    // *Obtener usuario autenticado
+
 
     res.json(usuario);
   }

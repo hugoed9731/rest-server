@@ -36,7 +36,11 @@ const UsuarioSchema = Schema({
 
 // SOBREESCRIBIENDO METODOS - SIEMPRE TIENE QUE SER UNA FUNCION NORMAL NO UNA FUNCION DE FLECHA
 UsuarioSchema.methods.toJSON = function() {
-    const {__v, password, ...usuario} = this.toObject(); // genera una instacia
+    const {__v, password, _id, ...usuario} = this.toObject(); // genera una instacia
+
+    // * transformar el _id por uid
+    usuario.uid = _id;
+
     return usuario; // cuando se grabe esto retorno el usuario
 }
 
