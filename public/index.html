@@ -4,9 +4,64 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso denegado</title>
+    <title>Google Sign-in</title>
 </head>
 <body>
-    <h1>Acceso denegado</h1>
+    <h1>Google Sign-in</h1>
+    <hr>
+
+    <div id="g_id_onload"
+         data-client_id="119932958538-1jseo35k2plf10fmcqbdbhqiml9gb9ho.apps.googleusercontent.com"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+
+      <button id="google_signout">
+          Signout
+      </button>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function handleCredentialResponse(response) {
+           
+            // ? GOOGLE TOKEN : ID_ TOKEN
+        //    console.log('id_token', response.credential);
+        const body = { id_token: response.credential }; // esto es propiamente lo que regresa de google
+
+        fetch('http://localhost:8080/api/auth/google', {
+            method: 'POST',
+            headers: { // le indicamos que tipo de contenido estoy enviando
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body) // el body tiene que estar serializado
+        })
+            .then(resp => resp.json())
+            .then(resp => {
+                console.log(resp);
+                localStorage.setItem('email', resp.usuario.correo)
+            })
+            .catch(console.warn);
+        }
+
+        const button = document.getElementById('google_signout');
+        button.onclick = () => {
+            console.log(google.accounts.id);
+            google.accounts.id.disableAutoSelect();
+
+            // ya que mandamos el correo al local storage - lo podemos mandar a eliminar
+            google.accounts.id.revoke(localStorage.getItem('email'), done => {
+                localStorage.clear(); // borrar el correo del local
+                location.reload(); // recargar la pagina y vaciar cualquier cosa que tengamos
+            });
+        }
+      </script>
 </body>
 </html>

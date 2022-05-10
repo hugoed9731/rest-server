@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos')
 
 
-const { login } = require('../controllers/auth');
+const { login, googleSignIn } = require('../controllers/auth');
 
 
 // router nos permite llamar esa función
@@ -15,6 +15,11 @@ router.post('/login', [
     check('password', 'La contraseña es oblogatoria').not().isEmpty(),
     validarCampos
 ], login);
+
+router.post('/google', [
+    check('id_token', 'id_token de google es necesario').not().isEmpty(),
+    validarCampos
+], googleSignIn);
 
 
 
