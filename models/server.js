@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const {dbConnection} = require('../database/config');
+const fileUpload = require('express-fileupload');
 
 class Server {
     constructor() {
@@ -16,6 +17,7 @@ class Server {
             categorias: '/api/categorias',
             productos: '/api/productos',
             usuarios: '/api/usuarios',
+            uploads: '/api/uploads'
         }
 
         // * CONECTAR A BD
@@ -50,6 +52,13 @@ class Server {
         // ! defecto se debe renderizar el contenido de la carpeta "public" en la raíz de nuestro proyecto
         // ! por tanto ignora al app.get('/');
 
+        // * MIDDELWARE PARA MANEJAR EL FILEUPLOAD - O LA CARGA DE ARCHIVOS
+            this.app.use(fileUpload({
+                useTempFiles : true,
+                tempFileDir : '/tmp/',
+                createParentPath: true // crea una carpeta por defecto si no trae una indicada en cuestion de textos
+            }));
+
     }
 
 
@@ -61,6 +70,7 @@ class Server {
         this.app.use(this.paths.categorias, require('../routes/categorias')); 
         this.app.use(this.paths.productos, require('../routes/productos')); 
         this.app.use(this.paths.usuarios, require('../routes/user'));
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
     }
 
     listen() {

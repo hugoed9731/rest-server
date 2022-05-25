@@ -29,7 +29,8 @@ const ProductoSchema = Schema({ //Schema para definir ese objeto
     descripcion: {
         type: String
     },
-    disponible: {type: Boolean, default: true}
+    disponible: {type: Boolean, default: true},
+    img: {type: String} // nos permite almacenar la img
 
 });
 

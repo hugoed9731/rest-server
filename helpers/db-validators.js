@@ -44,10 +44,25 @@ const esRoleValido = async(rol = '') => { // custom recibe el valor que estoy ev
       }
     } 
 
+    // * Validar colecciones permitidad
+
+    const coleccionesPermitidas = (coleccion = '', colecciones = []) => {
+
+      // ! verificar que esta coleccion existe en el arreglo
+      const incluida = colecciones.includes( coleccion );
+      if(!incluida) { // si no esta incluida. debemos de dispara el error siguiente
+        throw new Error(`La coleccion ${coleccion} no es permitidad, ${colecciones}`)
+      }
+
+      return true;
+
+    }
+
   module.exports = {
       esRoleValido,
       existeEmail,
       existeUsuarioPorId,
       existeCategoriaPorId,
-      existeProductoPorId
+      existeProductoPorId,
+      coleccionesPermitidas
   }
